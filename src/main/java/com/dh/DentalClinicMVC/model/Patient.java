@@ -1,6 +1,4 @@
-package model;
-
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
+package com.dh.DentalClinicMVC.model;
 
 import java.time.LocalDate;
 

@@ -1,4 +1,4 @@
-package dao;
+package com.dh.DentalClinicMVC.dao;
 
 import java.util.List;
 

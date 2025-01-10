@@ -1,8 +1,8 @@
-package service;
+package com.dh.DentalClinicMVC.service;
 
-import dao.IDao;
-import dao.PatientDaoH2;
-import model.Patient;
+import com.dh.DentalClinicMVC.dao.IDao;
+import com.dh.DentalClinicMVC.dao.PatientDaoH2;
+import com.dh.DentalClinicMVC.model.Patient;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

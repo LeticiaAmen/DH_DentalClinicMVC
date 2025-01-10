@@ -1,4 +1,4 @@
-package model;
+package com.dh.DentalClinicMVC.model;
 
 public class Dentist {
     private Integer id;

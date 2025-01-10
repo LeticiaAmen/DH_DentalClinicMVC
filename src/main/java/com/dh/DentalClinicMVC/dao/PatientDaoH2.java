@@ -1,7 +1,7 @@
-package dao;
+package com.dh.DentalClinicMVC.dao;
 
-import model.Address;
-import model.Patient;
+import com.dh.DentalClinicMVC.model.Address;
+import com.dh.DentalClinicMVC.model.Patient;
 
 import java.sql.*;
 import java.util.ArrayList;

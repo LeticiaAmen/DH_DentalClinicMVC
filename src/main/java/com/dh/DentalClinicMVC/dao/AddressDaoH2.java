@@ -1,6 +1,6 @@
-package dao;
+package com.dh.DentalClinicMVC.dao;
 
-import model.Address;
+import com.dh.DentalClinicMVC.model.Address;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

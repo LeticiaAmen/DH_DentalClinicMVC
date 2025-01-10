@@ -1,6 +1,6 @@
 package com.dh.DentalClinicMVC;
 
-import dao.DB;
+import com.dh.DentalClinicMVC.dao.DB;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
