@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.dh.DentalClinicMVC.service.PatientService;
 
 @Controller
-@RequestMapping("/index")
+@RequestMapping("/inicio")
 public class IndexController {
 
     private PatientService patientService;
@@ -40,7 +40,7 @@ public class IndexController {
         model.addAttribute("lastNameDentist", dentist.getLastName());
         model.addAttribute("registration", dentist.getRegistration());
 
-        return "index";
+        return "inicio";
 
 
     }

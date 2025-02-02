@@ -27,7 +27,8 @@ public class DentistDaoH2 implements IDao<Dentist> {
         Connection connection = null;
         try {
             connection = DB.getConnection();
-            PreparedStatement ps = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS); //Statement.RETURN_GENERATED_KEYS para que genere y devuelva la id
+            //Statement.RETURN_GENERATED_KEYS para que genere y devuelva la id
+            PreparedStatement ps = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, dentist.getRegistration());
             ps.setString(2, dentist.getName());
             ps.setString(3, dentist.getLastName());
