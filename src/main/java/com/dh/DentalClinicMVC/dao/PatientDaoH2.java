@@ -2,11 +2,13 @@ package com.dh.DentalClinicMVC.dao;
 
 import com.dh.DentalClinicMVC.model.Address;
 import com.dh.DentalClinicMVC.model.Patient;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class PatientDaoH2 implements IDao<Patient> {
 
     private static final String SQL_INSERT = "INSERT INTO PATIENTS (NAME, LAST_NAME, EMAIL, CARD_IDENTITY, " +

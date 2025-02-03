@@ -12,8 +12,8 @@ public class DentistService {
 
     private IDao<Dentist> dentistIDao;
 
-    public DentistService (){
-        this.dentistIDao = new DentistDaoH2();
+    public DentistService(IDao<Dentist> dentistIDao) {
+        this.dentistIDao = dentistIDao;
     }
 
     public Dentist save(Dentist dentist) {

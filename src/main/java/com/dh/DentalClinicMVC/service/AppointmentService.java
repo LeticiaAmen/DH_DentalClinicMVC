@@ -11,8 +11,8 @@ import java.util.List;
 public class AppointmentService {
     private IDao<Appointment> appointmentIDao;
 
-    public AppointmentService() {
-        this.appointmentIDao = new AppointmentDaoList();
+    public AppointmentService(IDao<Appointment> appointmentIDao) {
+        this.appointmentIDao = appointmentIDao;
     }
 
     public Appointment save(Appointment appointment) {
