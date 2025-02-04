@@ -1,6 +1,6 @@
 package com.dh.DentalClinicMVC.service.impl;
 
-import com.dh.DentalClinicMVC.model.Dentist;
+import com.dh.DentalClinicMVC.entity.Dentist;
 import com.dh.DentalClinicMVC.repository.IDentistRepository;
 import com.dh.DentalClinicMVC.service.IDentistService;
 import org.springframework.beans.factory.annotation.Autowired;

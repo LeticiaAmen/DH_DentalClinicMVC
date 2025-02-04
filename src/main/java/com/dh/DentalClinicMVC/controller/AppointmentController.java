@@ -1,6 +1,7 @@
 package com.dh.DentalClinicMVC.controller;
 
-import com.dh.DentalClinicMVC.model.Appointment;
+import com.dh.DentalClinicMVC.dto.AppointmentDTO;
+import com.dh.DentalClinicMVC.entity.Appointment;
 import com.dh.DentalClinicMVC.service.IAppointmentService;
 import com.dh.DentalClinicMVC.service.IDentistService;
 import com.dh.DentalClinicMVC.service.IPatientService;
@@ -27,22 +28,26 @@ public class AppointmentController {
         this.patientService = patientService;
     }
 
+    //en el controlador que es lo que tiene contacto con la vista, dejamos de trabajar con entidades y
+    //ahora trabajamos con DTO, añadiendo una capa más de abstracción. protegemos la información
+    //vamos a recibir y enviar DTOs pero persistir entidades en la bd
+
     //este endpoint consulta todos los turnos
     @GetMapping
-    public ResponseEntity<List<Appointment>>  finAll() {
+    public ResponseEntity<List<AppointmentDTO>>  finAll() {
         return ResponseEntity.ok(appointmentService.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<Appointment> save(@RequestBody Appointment appointment) {
+    public ResponseEntity<AppointmentDTO> save(@RequestBody AppointmentDTO appointmentDTO) {
         // Declaración de la variable que almacenará la respuesta HTTP
-        ResponseEntity<Appointment> response;
+        ResponseEntity<AppointmentDTO> response;
 
         // Verifica si el odontólogo y el paciente asociados a la cita existen en la base de datos
-        if(dentistService.findById(appointment.getDentist().getId()).isPresent()
-        && patientService.findById(appointment.getPatient().getId()).isPresent()) {
+        if(dentistService.findById(appointmentDTO.getDentist_id()).isPresent()
+        && patientService.findById(appointmentDTO.getPatient_id()).isPresent()) {
             // Si ambos existen, seteamos el código 200 y le agregamos el turno como cuerpo de la respuesta
-            response = ResponseEntity.ok(appointmentService.save(appointment));
+            response = ResponseEntity.ok(appointmentService.save(appointmentDTO));
         } else{
             // Si alguno de los dos no existe, seteamos un código 400 Bad Request
             response = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -52,8 +57,8 @@ public class AppointmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Appointment> findById(@PathVariable Long id) {
-        Optional<Appointment> appointmentToLookFor = appointmentService.findById(id);
+    public ResponseEntity<AppointmentDTO> findById(@PathVariable Long id) {
+        Optional<AppointmentDTO> appointmentToLookFor = appointmentService.findById(id);
 
         if(appointmentToLookFor.isPresent()) {
             return ResponseEntity.ok(appointmentToLookFor.get());
@@ -63,20 +68,20 @@ public class AppointmentController {
     }
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody Appointment appointment) {
-        ResponseEntity<String> response;
+    public ResponseEntity<AppointmentDTO> update(@RequestBody AppointmentDTO appointmentDTO) throws Exception {
+        ResponseEntity<AppointmentDTO> response;
 
         //chequeamos que existan el odontólogo y el paciente
-        if(dentistService.findById(appointment.getDentist().getId()).isPresent() &&
-        patientService.findById(appointment.getPatient().getId()).isPresent()) {
+        if(dentistService.findById(appointmentDTO.getDentist_id()).isPresent() &&
+        patientService.findById(appointmentDTO.getPatient_id()).isPresent()) {
             //ambos existen en la BD
-            //seteamos al responseEntity en código 200 y le agregamos el turno
-            appointmentService.update(appointment);
-            response = ResponseEntity.ok("Se actualizó el turno con id: " + appointment.getId());
+            //seteamos al responseEntity en código 200 y le agregamos el turno dto como cuerpo de la respuesta
+            response = ResponseEntity.ok(appointmentService.update(appointmentDTO));
+
         }else {
             //uno no existe, entonces bloqueamos la operación
             //setear al REsponseEntity en el código 400
-            response = ResponseEntity.badRequest().body("No se puede actualizar un turno que no existe en la Base de datos");
+            response = ResponseEntity.badRequest().build();
         }
         return response;
     }

@@ -1,6 +1,6 @@
 package com.dh.DentalClinicMVC.service;
 
-import com.dh.DentalClinicMVC.model.Dentist;
+import com.dh.DentalClinicMVC.entity.Dentist;
 
 import java.util.List;
 import java.util.Optional;
