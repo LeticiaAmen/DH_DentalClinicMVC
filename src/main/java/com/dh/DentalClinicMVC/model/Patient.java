@@ -1,39 +1,49 @@
 package com.dh.DentalClinicMVC.model;
 
-import java.time.LocalDate;
+import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "Patients")
 public class Patient {
-    private Integer id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "patient_id")
+    private Long id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "card_identity")
     private Integer cardIdentity;
+
+    @Column(name = "admission_of_date")
     private LocalDate admissionOfDate;
+
+    //cascade.all:  cualquier operación realizada sobre un paciente se aplicará a su domicilio
+    //al persistir un paciente se persiste automáticamente su domicilio asociado
+    //no es necesario persistir el domicio explícitamente porque la cascada lo maneja
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Address address;
+
+    @OneToMany(mappedBy = "patient")
+    private Set<Appointment> appointments = new HashSet<>();
 
     public Patient() {
     }
 
-    public Patient(Integer id, String name, String lastName, String email, Integer cardIdentity, LocalDate admissionOfDate, Address address) {
-        this.id = id;
-        this.name = name;
-        this.lastName = lastName;
-        this.email = email;
-        this.cardIdentity = cardIdentity;
-        this.admissionOfDate = admissionOfDate;
-        this.address = address;
-    }
 
-    public Patient(String name, String lastName, String email, Integer cardIdentity, LocalDate admissionOfDate, Address address) {
-        this.name = name;
-        this.lastName = lastName;
-        this.email = email;
-        this.cardIdentity = cardIdentity;
-        this.admissionOfDate = admissionOfDate;
-        this.address = address;
-    }
-
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -57,7 +67,7 @@ public class Patient {
         this.address = address;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -87,5 +97,13 @@ public class Patient {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(Set<Appointment> appointments) {
+        this.appointments = appointments;
     }
 }

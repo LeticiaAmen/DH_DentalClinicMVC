@@ -1,9 +1,12 @@
 package com.dh.DentalClinicMVC.service;
 
 import com.dh.DentalClinicMVC.model.Patient;
+import com.dh.DentalClinicMVC.service.impl.PatientServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,15 +14,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class PatientServiceTest {
 
     @Autowired
-    private PatientService patientService;
+    private PatientServiceImpl patientServiceImpl;
 
     @Test
     void findById() {
-        Integer idPatient = 3;
+        Long idPatient = (long) 3;
 
         //buscar al paciente
-        Patient patient = patientService.findById(idPatient);
-        assertNotNull(patient);
+        Optional<Patient> patient = patientServiceImpl.findById(idPatient);
+        assertTrue(patient.isPresent());
 
     }
 }

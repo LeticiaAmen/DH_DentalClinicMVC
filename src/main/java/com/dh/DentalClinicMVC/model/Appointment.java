@@ -1,34 +1,36 @@
 package com.dh.DentalClinicMVC.model;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "appointments")
 public class Appointment {
-    private Integer id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "appointment_id")
+    private Long id;
+
+    @ManyToOne
     private Patient patient;
+
+    @ManyToOne
     private Dentist dentist;
+
+    @Column(name = "date")
     private LocalDate date;
 
-    public Appointment(Integer id, Patient patient, Dentist dentist, LocalDate date) {
-        this.id = id;
-        this.patient = patient;
-        this.dentist = dentist;
-        this.date = date;
-    }
-
-    public Appointment(Patient patient, Dentist dentist, LocalDate date) {
-        this.patient = patient;
-        this.dentist = dentist;
-        this.date = date;
-    }
 
     public Appointment() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

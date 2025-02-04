@@ -1,50 +1,79 @@
 package com.dh.DentalClinicMVC.controller;
 
 import com.dh.DentalClinicMVC.model.Dentist;
-import com.dh.DentalClinicMVC.service.DentistService;
+import com.dh.DentalClinicMVC.service.IDentistService;
+import com.dh.DentalClinicMVC.service.impl.DentistServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/odontologos")
 public class DentistController {
 
-    private DentistService dentistService;
+    private IDentistService identistService;
 
     @Autowired
-    public DentistController(DentistService dentistService) {
-        this.dentistService = dentistService;
+    public DentistController(IDentistService dentistService) {
+        this.identistService = dentistService;
     }
+
 
     //localhost:8080/odontologos/{id}
     @GetMapping("/{id}") //entre llaves porque es una variable
-    public Dentist findById(@PathVariable Integer id) {
-        return dentistService.findById(id);
+    public ResponseEntity<Dentist> findById(@PathVariable Long id) {
+        Optional<Dentist> dentist = identistService.findById(id);
+        if(dentist.isPresent()){
+            return ResponseEntity.ok().body(dentist.get());
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     //guardar nuevo odontologo
     @PostMapping
-    public Dentist save(@RequestBody Dentist dentist) {
-        return dentistService.save(dentist);
+    public ResponseEntity<Dentist> save(@RequestBody Dentist dentist) {
+        return ResponseEntity.ok(identistService.save(dentist));
     }
 
     //actualizar los datos de un odontologo
     @PutMapping
-    public void update(@RequestBody Dentist dentist) {
-        dentistService.updateDentist(dentist);
+    public ResponseEntity<String> update(@RequestBody Dentist dentist) {
+        ResponseEntity<String> response;
+        Optional<Dentist> dentistToLookFor = identistService.findById(dentist.getId());
+
+        if(dentistToLookFor.isPresent()){
+            identistService.update(dentist);
+            response = ResponseEntity.ok("Se actualizó el odontólogo con nombre: " + dentist.getName());
+        }else {
+            response = ResponseEntity.ok().body("No se puede actualizar un odontólogo que no existe en la base de datos");
+        }
+        return response;
     }
 
     //borrar odontologo
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
-        dentistService.deleteDentist(id);
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        ResponseEntity<String> response;
+        Optional<Dentist> dentist = identistService.findById(id);
+
+        if(dentist.isPresent()){
+            identistService.delete(id);
+            response = ResponseEntity.ok("Se eliminó el odontólogo con id: " + id);
+        }else {
+            response = ResponseEntity.ok().body("No se puede eliminar un odontólogo que no existe en la base de datos");
+        }
+        return response;
+
     }
 
     //Listar todos
     @GetMapping
-    public List<Dentist> findAll() {
-        return dentistService.findAll();
+    public ResponseEntity<List<Dentist>> findAll() {
+        return ResponseEntity.ok(identistService.findAll());
     }
 }
