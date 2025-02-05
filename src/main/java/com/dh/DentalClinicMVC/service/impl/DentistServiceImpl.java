@@ -46,4 +46,11 @@ public class DentistServiceImpl implements IDentistService {
     public List<Dentist> findAll() {
         return dentistRepository.findAll();
     }
+
+    @Override
+    public Optional<Dentist> findByRegistration(Integer registration) {
+        return dentistRepository.findByRegistration(registration);
+    }
+
+
 }
