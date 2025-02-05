@@ -4,6 +4,7 @@ import com.dh.DentalClinicMVC.dto.AppointmentDTO;
 import com.dh.DentalClinicMVC.entity.Appointment;
 import com.dh.DentalClinicMVC.entity.Dentist;
 import com.dh.DentalClinicMVC.entity.Patient;
+import com.dh.DentalClinicMVC.exception.ResourceNotFoundException;
 import com.dh.DentalClinicMVC.repository.IAppointmentRepository;
 import com.dh.DentalClinicMVC.service.IAppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +69,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
     }
 
     @Override
-    public Optional<AppointmentDTO> findById(Long id) {
+    public Optional<AppointmentDTO> findById(Long id) throws ResourceNotFoundException {
         //buscamos la entidad por id en la BD
         Optional<Appointment> appointmentToLookFor = appointmentRepository.findById(id);
 
@@ -90,8 +91,11 @@ public class AppointmentServiceImpl implements IAppointmentService {
             appointmentDTOToReturn.setDate(appointmentEntity.getDate().toString());
 
             appointmentDTOOptional = Optional.of(appointmentDTOToReturn);
+            return appointmentDTOOptional;
+        } else {
+            throw new ResourceNotFoundException("No se encontró el turno con id: " + id);
         }
-        return appointmentDTOOptional;
+
     }
 
     @Override
@@ -140,9 +144,30 @@ public class AppointmentServiceImpl implements IAppointmentService {
     }
 
     @Override
-    public void delete(Long id) {
-        appointmentRepository.deleteById(id);
+    public Optional<AppointmentDTO> delete(Long id) throws ResourceNotFoundException {
+        //buscamos la entidad por id en BD y guardarla en un optional
+        Optional<Appointment> appointmentToLookFor = appointmentRepository.findById(id);
+        Optional<AppointmentDTO> appointmentDTO;
 
+        if(appointmentToLookFor.isPresent()){
+            //si existe la entidad lo recuperamos y lo guardamos en una variable turno
+            Appointment appointment = appointmentToLookFor.get();
+
+            //devolvemos un dto entonces vamos a trabajar sobre él
+            //creamos una instancia de ese DTO y le seteamos los atributos de la entidad recuperada
+            AppointmentDTO appointmentDTOToReturn = new AppointmentDTO();
+            appointmentDTOToReturn.setId(appointment.getId());
+            appointmentDTOToReturn.setDentist_id(appointment.getDentist().getId());
+            appointmentDTOToReturn.setPatient_id(appointment.getPatient().getId());
+            appointmentDTOToReturn.setDate(appointment.getDate().toString());
+
+            appointmentDTO = Optional.of(appointmentDTOToReturn);
+            return appointmentDTO;
+
+        } else {
+            //lanzamos la exception
+            throw new ResourceNotFoundException("No se encontró el turno con id: " + id);
+        }
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.dh.DentalClinicMVC.controller;
 
 import com.dh.DentalClinicMVC.dto.AppointmentDTO;
 import com.dh.DentalClinicMVC.entity.Appointment;
+import com.dh.DentalClinicMVC.exception.ResourceNotFoundException;
 import com.dh.DentalClinicMVC.service.IAppointmentService;
 import com.dh.DentalClinicMVC.service.IDentistService;
 import com.dh.DentalClinicMVC.service.IPatientService;
@@ -57,7 +58,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AppointmentDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<AppointmentDTO> findById(@PathVariable Long id) throws ResourceNotFoundException {
         Optional<AppointmentDTO> appointmentToLookFor = appointmentService.findById(id);
 
         if(appointmentToLookFor.isPresent()) {
@@ -87,18 +88,9 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
-        ResponseEntity<String> response;
-
-        if(appointmentService.findById(id).isPresent()) {
-            appointmentService.delete(id);
-            response = ResponseEntity.ok("Se eliminó el turno con id: " + id);
-        } else {
-            response = ResponseEntity.ok().body("No se puede eliminar un turno que no existe en la Base de datos");
-        }
-        return response;
+    public ResponseEntity<String> delete(@PathVariable Long id) throws ResourceNotFoundException {
+        appointmentService.delete(id);
+        return ResponseEntity.ok("Se eliminó el turno con id: " + id);
     }
-
-
 
 }
